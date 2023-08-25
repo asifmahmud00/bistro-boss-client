@@ -4,9 +4,10 @@ import orderCover from '../../../assets/shop/banner2.jpg';
 import Cover from '../../Shared/Cover/Cover';
 import { useState } from 'react';
 import useMenu from '../../../hooks/useMenu';
+import FoodCard from '../../../components/SectionTitle/FoodCard/FoodCard';
 
 const Order = () => {
-    const [tabIndex,setTabIndex] = useState(0);
+    const [tabIndex, setTabIndex] = useState(0);
     const [menu] = useMenu();
     const dessert = menu.filter(item => item.category === 'dessert');
     const soup = menu.filter(item => item.category === 'soup');
@@ -24,7 +25,17 @@ const Order = () => {
                     <Tab>Dessert</Tab>
                     <Tab>Drinks</Tab>
                 </TabList>
-                <TabPanel></TabPanel>
+                <TabPanel>
+                    <div className='grid md: grid-cols-3 gap-10'>
+                        {
+                            salad.map(item => <FoodCard
+                                key={item._id}
+                                item={item}
+                            ></FoodCard>)
+                        }
+                    </div>
+
+                </TabPanel>
                 <TabPanel></TabPanel>
             </Tabs>
         </div>
