@@ -4,20 +4,30 @@ import orderCover from '../../../assets/shop/banner2.jpg';
 import Cover from '../../Shared/Cover/Cover';
 import { useState } from 'react';
 import useMenu from '../../../hooks/useMenu';
-import FoodCard from '../../../components/SectionTitle/FoodCard/FoodCard';
+import OrderTab from '../OrderTab/OrderTab';
+import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const Order = () => {
-    const [tabIndex, setTabIndex] = useState(0);
+    const categories = ['salad', 'pizza', 'soup', 'dessert','drinks']
+    const {category} = useParams();
+    const initialIndex = categories.indexOf(category);
+    const [tabIndex, setTabIndex] = useState(initialIndex);
     const [menu] = useMenu();
+    
+    
     const dessert = menu.filter(item => item.category === 'dessert');
     const soup = menu.filter(item => item.category === 'soup');
     const salad = menu.filter(item => item.category === 'salad');
-    const offered = menu.filter(item => item.category === 'offered');
+    const drinks = menu.filter(item => item.category === 'drinks');
     const pizza = menu.filter(item => item.category === 'pizza');
     return (
         <div>
+             <Helmet>
+                <title>Bistro Boss | Order Food</title>
+            </Helmet>
             <Cover img={orderCover} title="Order Food"></Cover>
-            <Tabs defaultIndex={tabIndex} onSelect={(index) => console.log(index)}>
+            <Tabs defaultIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
                 <TabList>
                     <Tab>SALAD</Tab>
                     <Tab>Pizza</Tab>
@@ -26,17 +36,20 @@ const Order = () => {
                     <Tab>Drinks</Tab>
                 </TabList>
                 <TabPanel>
-                    <div className='grid md: grid-cols-3 gap-10'>
-                        {
-                            salad.map(item => <FoodCard
-                                key={item._id}
-                                item={item}
-                            ></FoodCard>)
-                        }
-                    </div>
-
+                    <OrderTab items={salad}></OrderTab>
                 </TabPanel>
-                <TabPanel></TabPanel>
+                <TabPanel>
+                    <OrderTab items={pizza}></OrderTab>
+                </TabPanel>
+                <TabPanel>
+                    <OrderTab items={soup}></OrderTab>
+                </TabPanel>
+                <TabPanel>
+                    <OrderTab items={dessert}></OrderTab>
+                </TabPanel>
+                <TabPanel>
+                    <OrderTab items={drinks}></OrderTab>
+                </TabPanel>
             </Tabs>
         </div>
     );
