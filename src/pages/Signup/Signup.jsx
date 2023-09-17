@@ -4,32 +4,48 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../provider/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 
 const Signup = () => {
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
     const { createUser, updateUserProfile } = useContext(AuthContext);
-const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const onSubmit = data => {
-        console.log(data);
+
         createUser(data.email, data.password)
             .then(result => {
                 const loggedUser = result.user;
                 console.log(loggedUser);
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
-                        console.log("User profile info updated");
-                        reset();
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: 'User Created Successfully',
-                            showConfirmButton: false,
-                            timer: 1500
-                          });
-                        navigate('/');  
+                        const saveUser = {name:data.name, email: data.email}
+                        fetch('http://localhost:5000/users', {
+                            method: 'POST',
+                            headers: {
+                                'content-type': 'application/json'
+                            },
+                            body: JSON.stringify(saveUser)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.insertedId) {
+                                    reset();
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: 'User Created Successfully',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    navigate('/');
+                                }
+                            })
+
+
+
                     })
                     .catch(error => console.log(error));
             })
@@ -95,6 +111,7 @@ const navigate = useNavigate();
                             </div>
                         </form>
                         <p><small>Alrady have an account? <Link to="/login">Login</Link></small></p>
+                        <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>
