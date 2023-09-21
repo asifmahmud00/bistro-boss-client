@@ -4,7 +4,7 @@ import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStat
 import { app } from "../firebase/firebase.config";
 import { useEffect } from "react";
 import axios from "axios";
-import { data } from "autoprefixer";
+
 
 
 export const AuthContext = createContext(null);
