@@ -14,25 +14,25 @@ const AllUser = () => {
 
 
     const handleMakeAdmin = user => {
-        fetch(`http://localhost:5000/users/admin/${user._id}`,{
+        fetch(`http://localhost:5000/users/admin/${user._id}`, {
             method: 'PATCH'
         })
-        .then(res=> res.json())
-        .then(data => {
-            if(data.modifiedCount){
-                refetch(); 
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: `${user.name} is an Admin now!`,
-                    showConfirmButton: false,
-                    timer: 1500
-                  })
-            }
-        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.modifiedCount) {
+                    refetch();
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: `${user.name} is an Admin now!`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
     }
     const handleDelete = user => {
-
+        console.log(user);
     }
 
     return (
@@ -54,17 +54,18 @@ const AllUser = () => {
                         </tr>
                     </thead>
                     <tbody>
-                       {users.map((user,index) => <tr key={user._id}>
-                            <th>{index+1}</th>
-                            <td>{user.name}</td>
-                            <td>{user.email}</td>
-                            <td>{user.role === 'admin'? 'Admin' : 
-                            <button onClick={() => handleMakeAdmin(user)} className="btn btn-ghost bg-orange-600"><FaUserShield></FaUserShield></button>
-                            }</td>
-                            <td><button onClick={() => handleDelete(user)} className="btn btn-ghost bg-red-700"><FaTrashAlt></FaTrashAlt></button></td>
-                        </tr>)}
-                        
-                        
+                        {users.map((user, index) =>
+                            <tr key={user._id}>
+                                <th>{index + 1}</th>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
+                                <td>{user.role === 'admin' ? 'Admin' :
+                                    <button onClick={() => handleMakeAdmin(user)} className="btn btn-ghost bg-orange-600"><FaUserShield></FaUserShield></button>
+                                }</td>
+                                <td><button onClick={() => handleDelete(user)} className="btn btn-ghost bg-red-700"><FaTrashAlt></FaTrashAlt></button></td>
+                            </tr>)}
+
+
                     </tbody>
                 </table>
             </div>
