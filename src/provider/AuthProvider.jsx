@@ -15,58 +15,58 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const googleProvider = new GoogleAuthProvider();
-    
- 
-    const createUser = (email,password) =>{
+
+
+    const createUser = (email, password) => {
         setLoading(true);
-        return createUserWithEmailAndPassword(auth,email,password);
+        return createUserWithEmailAndPassword(auth, email, password);
     }
 
-    const signIn = (email,password) =>{
+    const signIn = (email, password) => {
         setLoading(true);
-        return signInWithEmailAndPassword(auth,email,password);
+        return signInWithEmailAndPassword(auth, email, password);
     }
 
-    const googleSignIn = () =>{
+    const googleSignIn = () => {
         setLoading(true);
-        return signInWithPopup(auth,googleProvider);
+        return signInWithPopup(auth, googleProvider);
     }
 
-    const logOut = () =>{
+    const logOut = () => {
         setLoading(true);
         return signOut(auth);
     }
 
-const updateUserProfile = (name,photo) => {
-    return updateProfile(auth.currentUser, {
-        displayName: name, photoURL: photo
-      });
-}
+    const updateUserProfile = (name, photo) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name, photoURL: photo
+        });
+    }
 
-    useEffect(()=> {
-        const unsubscribe= onAuthStateChanged(auth, currentUser =>{
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
             console.log('current user', currentUser);
 
             //get set token
-            if(currentUser)
-            {
-                axios.post('http://localhost:5000/jwt',{email: currentUser.email})
-                .then(data => {
-                    console.log(data.data.token);
-                    localStorage.setItem('access-token',data.data.token)
-                })
+            if (currentUser) {
+                axios.post('http://localhost:5000/jwt', { email: currentUser.email })
+                    .then(data => {
+                        console.log(data.data.token);
+                        localStorage.setItem('access-token', data.data.token)
+                        setLoading(false);
+                    })
             }
-            else{
+            else {
                 localStorage.removeItem('access-token');
             }
 
             setLoading(false);
         });
-        return ()=>{
+        return () => {
             return unsubscribe();
         }
-    },[])
+    }, [])
 
 
     const authInfo = {
